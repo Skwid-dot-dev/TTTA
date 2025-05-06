@@ -101,133 +101,113 @@ function game_start() {
     });
 }
 
-function travel_map(){
-	global.game_text = "Off into the distance!\n\n" +
+function travel_map() {
+    global.game_text = "Off into the distance!\n\n" +
                       "Where shall we go today?\n" +
                       "Choose your destination to begin your adventure.";
     
     // Clear button options
     ds_list_clear(global.button_options);
     
-    // Add location buttons
+    // Add location buttons only if the player meets the level requirement
     for (var i = 0; i < ds_list_size(global.locations); i++) {
         var location = global.locations[| i];
         var level_req = global.location_levels[? location];
-        var button_text = "Go to " + string(location) + " (" + string(level_req) + "+)";
         
-        ds_list_add(global.button_options, {
-            text: button_text,
-            action: change_location
-        });
-    }	
+        if (global.player_level >= level_req) {
+            var button_text = "Go to " + string(location);
+            ds_list_add(global.button_options, {
+                text: button_text,
+                action: change_location
+            });
+        }
+    }
 }
-
-// Change location
 function change_location() {
     var location_index = floor((mouse_x - obj_text_display.text_x) / (obj_text_display.button_width + obj_text_display.button_spacing));
     
     if (location_index < ds_list_size(global.locations)) {
-        var new_location = global.locations[| location_index];
-        var required_level = global.location_levels[? new_location];
+        // Update the player's current location
+        global.current_location = global.locations[| location_index];
         
-        // Check if player meets level requirement
-        if (global.player_level < required_level) {
-            global.game_text = "You need to be at least level " + string(required_level) + 
-                              " to travel to the " + new_location + ".\n\n" +
-                              "You are currently level " + string(global.player_level) + ".";
-            
-            // Clear button options
-            ds_list_clear(global.button_options);
-            
-            // Add a back button
-            ds_list_add(global.button_options, {
-                text: "Back",
-                action: home_area
-            });
-            
-            return;
+        global.game_text = "You've traveled to the " + global.current_location + ".\n";
+        global.game_text += "What would you like to do?";
+        
+        // Clear button options
+        ds_list_clear(global.button_options);
+        
+        // Add location actions
+        ds_list_add(global.button_options, {
+            text: "Explore",
+            action: explore_area
+        });
+        
+        // Add skill-based actions based on location
+        switch(global.current_location) {
+            case "forest":
+                ds_list_add(global.button_options, {
+                    text: "Forage for plants",
+                    action: perform_foraging
+                });
+                break;
+            case "cave":
+                ds_list_add(global.button_options, {
+                    text: "Mine for minerals",
+                    action: perform_mining
+                });
+                break;
+            case "meadow":
+                ds_list_add(global.button_options, {
+                    text: "Collect crafting materials",
+                    action: collect_crafting_materials
+                });
+                break;
+            case "mountain":
+                ds_list_add(global.button_options, {
+                    text: "Mine for rare gems",
+                    action: perform_mining_rare
+                });
+                break;
+            case "desert":
+                ds_list_add(global.button_options, {
+                    text: "Search for desert herbs",
+                    action: perform_desert_foraging
+                });
+                break;
         }
-	}
         
-        global.current_location = new_location;
+        // Add standard buttons
+        ds_list_add(global.button_options, {
+            text: "View Skills",
+            action: view_skills
+        });
         
-	global.game_text = "You've traveled to the " + global.current_location + ".\n";
-    global.game_text += "What would you like to do?";
-    
-    // Clear button options
-    ds_list_clear(global.button_options);
-    
-    // Add location actions
-    ds_list_add(global.button_options, {
-        text: "Explore",
-        action: explore_area
-    });
-    
-    // Add skill-based actions based on location
-    switch(global.current_location) {
-        case "forest":
-            ds_list_add(global.button_options, {
-                text: "Forage for plants",
-                action: perform_foraging
-            });
-            break;
-        case "cave":
-            ds_list_add(global.button_options, {
-                text: "Mine for minerals",
-                action: perform_mining
-            });
-            break;
-        case "meadow":
-            ds_list_add(global.button_options, {
-                text: "Collect crafting materials",
-                action: collect_crafting_materials
-            });
-            break;
-        case "mountain":
-            ds_list_add(global.button_options, {
-                text: "Mine for rare gems",
-                action: perform_mining_rare
-            });
-            break;
-        case "desert":
-            ds_list_add(global.button_options, {
-                text: "Search for desert herbs",
-                action: perform_desert_foraging
-            });
-            break;
-    }
-    
-    // Add standard buttons
-    ds_list_add(global.button_options, {
-        text: "View Skills",
-        action: view_skills
-    });
-    
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: travel_map
-    });
-	
-	 ds_list_add(global.button_options, {
+        ds_list_add(global.button_options, {
+            text: "Travel",
+            action: travel_map
+        });
+        
+        ds_list_add(global.button_options, {
             text: "Return Home",
             action: home_area
-     });
-    
-    ds_list_add(global.button_options, {
-        text: "View Monsters",
-        action: view_monsters
-    });
-    
-    // If player has crafting materials, add crafting option
-    var can_craft = false;
-    // Check inventory for crafting materials
-    // [Code to check inventory]
-    
-    if (can_craft || global.skills[? "Crafting"].level > 1) {
-        ds_list_add(global.button_options, {
-            text: "Craft Items",
-            action: perform_crafting
         });
+        
+        ds_list_add(global.button_options, {
+            text: "View Monsters",
+            action: view_monsters
+        });
+        
+        // If player has crafting materials, add crafting option
+        var can_craft = false;
+        // Check inventory for crafting materials
+        // [Code to check inventory]
+        
+        if (can_craft || global.skills[? "Crafting"].level > 1) {
+            ds_list_add(global.button_options, {
+                text: "Craft Items",
+                action: perform_crafting
+            });
+        }
     }
 }
 
