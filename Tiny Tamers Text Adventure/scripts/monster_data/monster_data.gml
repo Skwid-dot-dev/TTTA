@@ -14,7 +14,10 @@ function initialize_monster_data(){
         type: "plant",
         habitat: "forest",
         description: "A small creature covered in leaves.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
     
     ds_map_add(global.monster_types, "Timberwolf", {
@@ -28,7 +31,10 @@ function initialize_monster_data(){
         type: "beast",
         habitat: "forest",
         description: "A wolf-like creature with bark for skin.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
 	
 	ds_map_add(global.monster_types, "Barkfang", {
@@ -42,7 +48,10 @@ function initialize_monster_data(){
 		type: "beast",
 		habitat: "forest",
 		description: "A large predator with wooden fangs.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Thornback", {
@@ -56,7 +65,10 @@ function initialize_monster_data(){
 	    type: "plant",
 	    habitat: "forest",
 	    description: "A slow-moving creature covered in sharp thorns.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
     
     // Cave monsters
@@ -71,7 +83,10 @@ function initialize_monster_data(){
         type: "rock",
         habitat: "cave",
         description: "A living rock formation that drops from cave ceilings.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
     
     ds_map_add(global.monster_types, "Glowshroom", {
@@ -85,7 +100,10 @@ function initialize_monster_data(){
         type: "fungus",
         habitat: "cave",
         description: "A bioluminescent mushroom creature.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
 	
 	ds_map_add(global.monster_types, "Lurker", {
@@ -99,7 +117,10 @@ function initialize_monster_data(){
 	    type: "shadow",
 	    habitat: "cave",
 	    description: "A lurking creature that blends into the darkness.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Quaketail", {
@@ -113,7 +134,10 @@ function initialize_monster_data(){
 	    type: "rock",
 	    habitat: "cave",
 	    description: "A massive, tail-swinging beast that shakes the ground.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
     
     // Meadow monsters
@@ -128,7 +152,10 @@ function initialize_monster_data(){
         type: "insect",
         habitat: "meadow",
         description: "A fast-flying insect with sharp wings.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
     
     ds_map_add(global.monster_types, "Fluffball", {
@@ -142,7 +169,10 @@ function initialize_monster_data(){
         type: "normal",
         habitat: "meadow",
         description: "A round, fluffy creature that bounces around.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
 	
 	ds_map_add(global.monster_types, "Dewfang", {
@@ -156,7 +186,10 @@ function initialize_monster_data(){
 	    type: "water",
 	    habitat: "meadow",
 	    description: "A nimble predator with fierce glistening paws.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Sunmoth", {
@@ -170,7 +203,10 @@ function initialize_monster_data(){
 	    type: "insect",
 	    habitat: "meadow",
 	    description: "A glowing moth that gathers sunlight for energy.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
     
     // Mountain monsters
@@ -185,7 +221,10 @@ function initialize_monster_data(){
         type: "rock",
         habitat: "mountain",
         description: "A boulder-like monster with sharp stone teeth.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
     
     ds_map_add(global.monster_types, "Frostfeather", {
@@ -199,7 +238,10 @@ function initialize_monster_data(){
         type: "ice",
         habitat: "mountain",
         description: "A bird-like creature with crystalized ice feathers.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
 	
 	ds_map_add(global.monster_types, "Blizzardhorn", {
@@ -213,7 +255,10 @@ function initialize_monster_data(){
 	    type: "ice",
 	    habitat: "mountain",
 	    description: "A massive horned beast that commands icy winds.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Slatewing", {
@@ -227,7 +272,10 @@ function initialize_monster_data(){
 	    type: "rock",
 	    habitat: "mountain",
 	    description: "A bird with rock-like feathers that can crush foes.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 	
 	// Desert Monsters
@@ -242,7 +290,10 @@ function initialize_monster_data(){
 	    type: "earth",
 	    habitat: "desert",
 	    description: "A swift burrowing predator with razor-sharp fangs.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Cactisaur", {
@@ -256,7 +307,10 @@ function initialize_monster_data(){
 	    type: "plant",
 	    habitat: "desert",
 	    description: "A towering cactus-like beast with spiked armor.",
-	    alpha_type: "none"
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 	
 	ds_map_add(global.monster_types, "Sandcrawler", {
@@ -270,7 +324,10 @@ function initialize_monster_data(){
 	    type: "ground",
 	    habitat: "desert",
 	    description: "A large scorpion-like creature that burrows through sand.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Cactoid", {
@@ -284,7 +341,10 @@ function initialize_monster_data(){
 	    type: "plant",
 	    habitat: "desert",
 	    description: "A sentient cactus with spines that can shoot like darts.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 	ds_map_add(global.monster_types, "Mirage", {
@@ -298,7 +358,10 @@ function initialize_monster_data(){
 	    type: "shadow",
 	    habitat: "desert",
 	    description: "A shimmering creature that can bend light to create illusions.",
-		alpha_type: "none"
+		alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
 }

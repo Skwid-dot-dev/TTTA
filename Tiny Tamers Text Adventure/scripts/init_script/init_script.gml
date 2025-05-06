@@ -183,10 +183,6 @@ function change_location() {
             action: view_skills
         });
         
-        ds_list_add(global.button_options, {
-            text: "Travel",
-            action: travel_map
-        });
         
         ds_list_add(global.button_options, {
             text: "Return Home",
@@ -270,6 +266,9 @@ function find_monster() {
         if (!ds_list_find_value(global.encountered_monsters, monster_template)) {
             ds_list_add(global.encountered_monsters, monster_template);
         }
+		// Determine if monster is shiny
+        var is_shiny = random(1) < monster_template.shiny_chance;
+        
         // Create a copy of the monster
         global.battle_monster = {
             name: monster_template.name,
@@ -282,8 +281,18 @@ function find_monster() {
             type: monster_template.type,
             habitat: monster_template.habitat,
             description: monster_template.description,
-			alpha_type: "none"
+			alpha_type: "none",
+			is_shiny: is_shiny,
+            shiny_color: monster_template.shiny_color
         };
+		 // Apply shiny bonus if applicable
+        if (is_shiny) {
+            var bonus = monster_template.shiny_bonus;
+            global.battle_monster.hp = round(global.battle_monster.hp * bonus);
+            global.battle_monster.max_hp = global.battle_monster.hp;
+            global.battle_monster.attack = round(global.battle_monster.attack * bonus);
+            global.battle_monster.defense = round(global.battle_monster.defense * bonus);
+        }
 		 // Potentially make this an alpha monster
         global.battle_monster = make_alpha_monster(global.battle_monster);
         
@@ -323,10 +332,6 @@ function find_monster() {
             action: explore_area
         });
         
-        ds_list_add(global.button_options, {
-            text: "Travel",
-            action: game_start
-        });
     }
     
     // Clean up

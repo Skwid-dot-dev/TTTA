@@ -9,6 +9,9 @@
     text_y = sh * 0.05;
     text_width = sw * 0.9;
     text_height = sh * 0.6;
+	text_speed = 2; // Number of frames between increments
+	text_timer = 0;
+	current_text_length = 0;
 	
     
     // Button properties

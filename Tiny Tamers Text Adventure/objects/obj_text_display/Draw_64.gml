@@ -1,6 +1,6 @@
 // Draw background
 draw_set_color(c_black);
-draw_rectangle(0, 0, room_width, room_height, false);
+draw_rectangle_color(0, 0, room_width, room_height, c_black, c_dkgray, c_black, c_dkgray, false);
 
 // Draw text area
 draw_set_color(c_dkgray);
@@ -8,7 +8,10 @@ draw_rectangle(text_x - 10, text_y - 10, text_x + text_width + 10, text_y + text
 draw_set_color(c_white);
 
 // Draw text
-draw_text_ext(text_x, text_y, global.game_text, 20, text_width);
+draw_set_alpha(sin(current_time / 100) * 0.2 + 0.8);
+var text_to_draw = string_copy(global.game_text, 1, min(string_length(global.game_text), current_text_length));
+draw_text_ext(text_x, text_y, text_to_draw, 20, text_width);
+draw_set_alpha(1);
 
 // Draw player info
 var info_y = text_y + text_height + 20;
@@ -26,3 +29,5 @@ if (global.game_state == "battle" && global.battle_monster != noone) {
 
 // Draw buttons
 draw_buttons(info_y + get_button_offset());
+
+   

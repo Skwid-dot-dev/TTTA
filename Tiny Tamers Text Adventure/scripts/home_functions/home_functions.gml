@@ -51,7 +51,8 @@ function rest_and_heal() {
     
     global.game_text = "You rest at home and recover your strength.\n";
     global.game_text += "Your health has been fully restored!\n\n";
-    
+    // Clear button options
+    ds_list_clear(global.button_options);
     // Return to home area
     home_area();
 }
@@ -70,7 +71,8 @@ function upgrade_storage() {
     } else {
         global.game_text = "You don't have enough currency to upgrade your storage!\n\n";
     }
-    
+    // Clear button options
+    ds_list_clear(global.button_options);
     // Return to home area
     home_area();
 }

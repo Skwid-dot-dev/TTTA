@@ -68,6 +68,7 @@ function draw_buttons(button_y) {
 
 // Store button positions
 function store_button_position(index, button_x, button_y, action) {
+		
     if (index >= ds_list_size(buttons)) {
         ds_list_add(buttons, { x1: button_x, y1: button_y, x2: button_x + button_width, y2: button_y + button_height, action: action });
     } else {
