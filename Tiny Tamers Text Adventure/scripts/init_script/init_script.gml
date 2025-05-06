@@ -23,6 +23,7 @@ function initialize_globals() {
     global.captured_monsters = ds_list_create();
     global.current_monster = -1;
     global.battle_monster = noone;
+    global.encountered_monsters = ds_list_create();
     
     // Available locations
     global.locations = ds_list_create();
@@ -266,7 +267,9 @@ function find_monster() {
     if (ds_list_size(available_monsters) > 0) {
         var rand_index = irandom(ds_list_size(available_monsters) - 1);
         var monster_template = available_monsters[| rand_index];
-        
+        if (!ds_list_find_value(global.encountered_monsters, monster_template)) {
+            ds_list_add(global.encountered_monsters, monster_template);
+        }
         // Create a copy of the monster
         global.battle_monster = {
             name: monster_template.name,
@@ -329,6 +332,31 @@ function find_monster() {
     // Clean up
     ds_list_destroy(available_monsters);
 }
+
+function view_monster_encyclopedia() {
+    global.game_state = "encyclopedia";
+    global.game_text = "Monster Encyclopedia:\n\n";
+    
+    for (var i = 0; i < ds_list_size(global.encountered_monsters); i++) {
+        var monster = global.encountered_monsters[| i];
+        global.game_text += string(i + 1) + ". " + monster.name + "\n" +
+                            "HP: " + string(monster.hp) + 
+                            ", Attack: " + string(monster.attack) + 
+                            ", Defense: " + string(monster.defense) + 
+                            "\nHabitat: " + monster.habitat + 
+                            ", Rarity: " + string(monster.rarity) + "\n\n";
+    }
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add back button
+    ds_list_add(global.button_options, {
+        text: "Back to Home",
+        action: home_area
+    });
+}
+
 
 // Attack in battle
 
