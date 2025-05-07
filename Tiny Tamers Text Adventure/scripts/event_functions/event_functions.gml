@@ -1,5 +1,4 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function initialize_events(){
 	// Common events
 ds_map_add(global.random_events, "lost_traveler", {
@@ -102,9 +101,9 @@ function generate_random_event() {
             
             // Check location requirement (if it exists)
             var valid_location = true;
-            if (variable_struct_exists(event_data, "locations")) {
+            if (variable_struct_exists(_event_data, "locations")) {
                 valid_location = false;
-                for (var i = 0; i < array_length(event_data.locations); i++) {
+                for (var i = 0; i < array_length(_event_data.locations); i++) {
                     if (_event_data.locations[i] == global.current_location) {
                         valid_location = true;
                         break;
@@ -189,13 +188,13 @@ function event_lost_traveler_help() {
     
     // Give player a random item
     var possible_items = ["Healing Herb", "Energy Root", "Antidote Leaf"];
-    var item = possible_items[irandom(array_length_1d(possible_items) - 1)];
+    var item = possible_items[irandom(array_length(possible_items) - 1)];
     
     // Add to inventory
-    if (ds_map_exists(global.inventory, item)) {
-        global.inventory[? item] += 1;
+    if (ds_map_exists(global.item_inventory, item)) {
+        global.item_inventory[? item] += 1;
     } else {
-        ds_map_add(global.inventory, item, 1);
+        ds_map_add(global.item_inventory, item, 1);
     }
     
     global.game_text += "You received a " + item + "!\n\n";
@@ -217,10 +216,6 @@ function event_lost_traveler_help() {
         action: explore_area
     });
     
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
 }
 
 function event_lost_traveler_ignore() {
@@ -234,10 +229,7 @@ function event_lost_traveler_ignore() {
         action: explore_area
     });
     
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
+
 }
 
 function event_lost_traveler_shortcut() {
@@ -249,10 +241,10 @@ function event_lost_traveler_shortcut() {
     var item = "Rare Capture Device";
     
     // Add to inventory
-    if (ds_map_exists(global.inventory, item)) {
-        global.inventory[? item] += 1;
+    if (ds_map_exists(global.item_inventory, item)) {
+        global.item_inventory[? item] += 1;
     } else {
-        ds_map_add(global.inventory, item, 1);
+        ds_map_add(global.item_inventory, item, 1);
     }
     
     global.game_text += "You received a " + item + "!\n\n";
@@ -274,10 +266,6 @@ function event_lost_traveler_shortcut() {
         action: explore_area
     });
     
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
 }
 
 
@@ -306,13 +294,13 @@ function event_treasure_chest_open() {
     
     // Define possible rewards
     var possible_rewards = ["Gold Coins", "Mystic Amulet", "Rare Gem", "Ancient Scroll"];
-    var reward = possible_rewards[irandom(array_length_1d(possible_rewards) - 1)];
+    var reward = possible_rewards[irandom(array_length(possible_rewards) - 1)];
     
     // Add to inventory
-    if (ds_map_exists(global.inventory, reward)) {
-        global.inventory[? reward] += 1;
+    if (ds_map_exists(global.item_inventory, reward)) {
+        global.item_inventory[? reward] += 1;
     } else {
-        ds_map_add(global.inventory, reward, 1);
+        ds_map_add(global.item_inventory, reward, 1);
     }
     
     global.game_text += "Inside, you find a " + reward + "!\n\n";
@@ -334,10 +322,6 @@ function event_treasure_chest_open() {
         action: explore_area
     });
     
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
 }
 
 function event_treasure_chest_ignore() {
@@ -350,10 +334,6 @@ function event_treasure_chest_ignore() {
         action: explore_area
     });
     
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
 }
 
 // Desert Mirage event

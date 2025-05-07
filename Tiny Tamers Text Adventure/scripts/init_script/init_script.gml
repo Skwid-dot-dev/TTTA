@@ -1,5 +1,5 @@
 function initialize_globals() {
-	
+	randomise();
 	
     // Player stats
     global.player_health = 100;
@@ -7,11 +7,14 @@ function initialize_globals() {
     global.player_level = 1;
     global.player_exp = 0;
     global.player_exp_to_next = 100;
-	global.player_agility = 5;
+	global.player_attack = 10;
+	global.player_defense = 10;
+	global.player_agility = 10;
 	global.player_currency = 0;
     
     // Game state
-    global.game_state = "home"; // exploration, battle, capture, inventory, home
+	enum GAME_STATE { HOME, EXPLORE, BATTLE, MENU }
+    global.game_state = GAME_STATE.HOME; // exploration, battle, menu
     global.current_location = "home";
 	
 	// Home area features
@@ -220,14 +223,14 @@ function explore_area() {
     // If no event happened, proceed with normal monster encounter logic
     if (!event_happened) {
     
-    // Random chance to find a monster
-    if (random(100) < 70) {
-        // Find a monster
-        find_monster();
-    } else {
-        // Find nothing
-        global.game_text += "You don't find any monsters this time.";
-	}
+		// Random chance to find a monster
+		if (random(100) < 70) {
+			// Find a monster
+			find_monster();
+		} else {
+			// Find nothing
+			global.game_text += "You don't find any monsters this time.";
+	
         
         // Clear button options
         ds_list_clear(global.button_options);
@@ -242,6 +245,7 @@ function explore_area() {
             text: "View Monsters",
             action: view_monsters
         });
+		}
     }
 }
 
@@ -272,13 +276,15 @@ function find_monster() {
         // Create a copy of the monster
         global.battle_monster = {
             name: monster_template.name,
+			level: 1,
+			knowledge: 0,
             hp: monster_template.hp,
             max_hp: monster_template.max_hp,
             attack: monster_template.attack,
             defense: monster_template.defense,
 			agility: monster_template.agility,
             rarity: monster_template.rarity,
-            type: monster_template.type,
+            typing: monster_template.typing,
             habitat: monster_template.habitat,
             description: monster_template.description,
 			alpha_type: "none",
@@ -296,30 +302,7 @@ function find_monster() {
 		 // Potentially make this an alpha monster
         global.battle_monster = make_alpha_monster(global.battle_monster);
         
-        global.game_state = "battle";
-        
-        global.game_text += "You encountered a wild " + global.battle_monster.name + "!\n\n";
-        global.game_text += global.battle_monster.description + "\n\n";
-        global.game_text += "What will you do?";
-        
-        // Clear button options
-        ds_list_clear(global.button_options);
-        
-        // Add battle actions
-        ds_list_add(global.button_options, {
-            text: "Attack",
-            action: battle_attack
-        });
-        
-        ds_list_add(global.button_options, {
-            text: "Try to Capture",
-            action: try_capture
-        });
-        
-        ds_list_add(global.button_options, {
-            text: "Run Away",
-            action: run_away
-        });
+        battle_initialize();
     } else {
         global.game_text += "You don't find any monsters this time.";
         
@@ -363,41 +346,6 @@ function view_monster_encyclopedia() {
 }
 
 
-// Attack in battle
-
-// Function to select a monster during battle
-function battle_select_monster() {
-    global.game_state = "battle_select";
-    
-    global.game_text = "Choose a monster to send into battle:\n\n";
-    
-    for (var i = 0; i < ds_list_size(global.captured_monsters); i++) {
-        var monster = global.captured_monsters[| i];
-        var active_text = (global.current_monster == i) ? " [ACTIVE]" : "";
-        global.game_text += string(i + 1) + ". " + monster.name + active_text + 
-                         " (HP: " + string(monster.hp) + "/" + string(monster.max_hp) + 
-                         ", Attack: " + string(monster.attack) + 
-                         ", Defense: " + string(monster.defense) + ")\n";
-    }
-    
-    // Clear button options
-    ds_list_clear(global.button_options);
-    
-    // Add monster buttons
-    for (var i = 0; i < ds_list_size(global.captured_monsters); i++) {
-        var monster = global.captured_monsters[| i];
-        ds_list_add(global.button_options, {
-            text: "Send " + monster.name,
-            action: set_battle_monster
-        });
-    }
-    
-    // Add back button
-    ds_list_add(global.button_options, {
-        text: "Back",
-        action: return_to_battle
-    });
-}
 
 // Function to set active monster during battle
 function set_battle_monster() {
@@ -462,183 +410,9 @@ function return_to_battle() {
 
 
 
-// Victory in battle
-function battle_victory() {
-    global.game_text = "You defeated the " + global.battle_monster.name + "!\n\n";
-    
-    // Calculate experience gained
-    var exp_gained = global.battle_monster.rarity * 20;
-    global.player_exp += exp_gained;
-    
-	// Add currency reward
-    var currency_gained = global.battle_monster.rarity * 10;
-    global.player_currency += currency_gained;
-    
-    global.game_text += "You gained " + string(exp_gained) + " experience points!\n";
-    global.game_text += "You found " + string(currency_gained) + " currency!\n\n";
-    
-    // Check for level up
-    if (global.player_exp >= global.player_exp_to_next) {
-        player_level_up();
-    }
-    
-    global.game_state = "exploration";
-    global.battle_monster = noone;
-    
-    // Clear button options
-    ds_list_clear(global.button_options);
-    
-    // Add exploration actions
-    ds_list_add(global.button_options, {
-        text: "Explore Again",
-        action: explore_area
-    });
-    
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
-    
-    ds_list_add(global.button_options, {
-        text: "View Monsters",
-        action: view_monsters
-    });
-}
 
-// Defeat in battle
-function battle_defeat() {
-    global.game_text = "You were defeated by the " + global.battle_monster.name + "!\n\n";
-    global.game_text += "You wake up later, feeling weak but alive.\n\n";
-    
-    // Reset player health to 25% of max
-    global.player_health = global.player_max_health * 0.25;
-    
-    global.game_state = "exploration";
-    global.battle_monster = noone;
-    
-    // Clear button options
-    ds_list_clear(global.button_options);
-    
-    // Add exploration actions
-    ds_list_add(global.button_options, {
-        text: "Explore Again",
-        action: explore_area
-    });
-    
-    ds_list_add(global.button_options, {
-        text: "Travel",
-        action: game_start
-    });
-    
-    ds_list_add(global.button_options, {
-        text: "View Monsters",
-        action: view_monsters
-    });
-}
 
-// Try to capture a monster
-function try_capture() {
-    global.game_text = "You throw a capture device at the " + global.battle_monster.name + "...\n\n";
-    
-    // Calculate capture chance based on monster's HP percentage and rarity
-    var hp_percentage = global.battle_monster.hp / global.battle_monster.max_hp;
-    var capture_chance = (1 - hp_percentage) * 100 / global.battle_monster.rarity;
-    
-    // Alpha monsters are harder to catch
-    if (global.battle_monster.alpha_type != "none") {
-        capture_chance *= 0.6; // 40% reduction in catch rate for alpha monsters
-        global.game_text += "This alpha monster seems harder to capture!\n\n";
-    }
-    
-    if (random(100) < capture_chance) {
-        // Successful capture
-        global.game_text += "Success! You captured the " + global.battle_monster.name + "!\n\n";
-        
-        // Check if storage capacity reached
-        if (ds_list_size(global.captured_monsters) >= global.storage_capacity) {
-            global.game_text += "Warning: Your monster storage is full! You need to upgrade your storage at home or release monsters.\n\n";
-        }
-        
-        // Add monster to collection
-        ds_list_add(global.captured_monsters, global.battle_monster);
-        
-        // Gain experience
-        var exp_gained = global.battle_monster.rarity * 30;
-        global.player_exp += exp_gained;
-        
-        // Gain currency for capture
-        var currency_gained = global.battle_monster.rarity * 15;
-        global.player_currency += currency_gained;
-        
-        global.game_text += "You gained " + string(exp_gained) + " experience points for the capture!\n";
-        global.game_text += "You earned " + string(currency_gained) + " currency for the capture!\n\n";
-        
-        // Check for level up
-        if (global.player_exp >= global.player_exp_to_next) {
-            player_level_up();
-        }
-        
-        global.game_state = "exploration";
-        global.battle_monster = noone;
-        
-        // Clear button options
-        ds_list_clear(global.button_options);
-        
-        // Add exploration actions
-        ds_list_add(global.button_options, {
-            text: "Explore Again",
-            action: explore_area
-        });
-        
-        ds_list_add(global.button_options, {
-            text: "Travel",
-            action: game_start
-        });
-        
-        ds_list_add(global.button_options, {
-            text: "View Monsters",
-            action: view_monsters
-        });
-    } else {
-        // Failed capture
-        global.game_text += "Oh no! The " + global.battle_monster.name + " broke free!\n\n";
-        
-        // Monster attacks back
-        var monster_damage = max(1, global.battle_monster.attack - global.player_level);
-        global.player_health -= monster_damage;
-        
-        global.game_text += "The " + global.battle_monster.name + " attacks you for " + string(monster_damage) + " damage!\n\n";
-        
-        // Check if player is defeated
-        if (global.player_health <= 0) {
-            battle_defeat();
-            return;
-        }
-        
-        global.game_text += "The " + global.battle_monster.name + " has " + string(global.battle_monster.hp) + 
-                          "/" + string(global.battle_monster.max_hp) + " HP left.\n\n";
-        global.game_text += "What will you do?";
-        
-        // Clear button options
-        ds_list_clear(global.button_options);
-        
-        // Add battle actions
-        ds_list_add(global.button_options, {
-            text: "Attack",
-            action: battle_attack
-        });
-        
-        ds_list_add(global.button_options, {
-            text: "Try to Capture",
-            action: try_capture
-        });
-        
-        ds_list_add(global.button_options, {
-            text: "Run Away",
-            action: run_away
-        });
-    }
-}
+
 
 // Run away from battle
 function run_away() {

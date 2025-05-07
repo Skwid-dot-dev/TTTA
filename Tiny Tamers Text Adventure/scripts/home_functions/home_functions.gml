@@ -33,11 +33,6 @@ function home_area() {
         text: "View Monsters",
         action: view_monsters
     });
-
-    ds_list_add(global.button_options, {
-        text: "View Monster Encyclopedia",
-        action: view_monster_encyclopedia
-    });
     
     ds_list_add(global.button_options, {
         text: "Travel",
