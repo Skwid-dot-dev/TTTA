@@ -10,12 +10,28 @@ function initialize_globals() {
 	global.player_attack = 10;
 	global.player_defense = 10;
 	global.player_agility = 10;
-	global.player_currency = 0;
+	global.player_currency = 2000;
+	//Player Car
+	global.player_car = noone;
+    global.player_cars = ds_list_create();
+	//Race Globals
+	global.race_state = "none"; // none, racing, shifting, results
+    global.race_progress = 0;
+    global.race_opponent_progress = 0;
+    global.race_length = 400; // meters
+    global.race_current_speed = 0;
+    global.race_current_gear = 1;
+    global.race_max_gear = 5;
+    global.race_shift_window = 0; // Timer for shifting
+    global.race_shift_perfect = false;
+    global.race_results = "";
+	//Run Count
+	global.adventure_count = 0;
     
     // Game state
-	enum GAME_STATE { HOME, EXPLORE, BATTLE, MENU }
-    global.game_state = GAME_STATE.HOME; // exploration, battle, menu
-    global.current_location = "home";
+	enum GAME_STATE { TUTORIAL, HOME, EXPLORE, BATTLE, MENU }
+    global.game_state = GAME_STATE.TUTORIAL; // exploration, battle, menu
+    global.current_location = "tutorial";
 	
 	// Home area features
     global.storage_level = 1;
@@ -30,11 +46,13 @@ function initialize_globals() {
     
     // Available locations
     global.locations = ds_list_create();
-    ds_list_add(global.locations, "home", "forest", "cave", "meadow", "mountain", "desert");
+    ds_list_add(global.locations, "tutorial", "home", "city", "forest", "cave", "meadow", "mountain", "desert");
 	
 	// Add location level requirements
     global.location_levels = ds_map_create();
+	ds_map_add(global.location_levels, "tutorial", 1);
 	ds_map_add(global.location_levels, "home", 1);
+	ds_map_add(global.location_levels, "city", 1);
     ds_map_add(global.location_levels, "forest", 1);
     ds_map_add(global.location_levels, "meadow", 3);
     ds_map_add(global.location_levels, "cave", 5);
@@ -64,7 +82,24 @@ function initialize_globals() {
     // Game text
     global.game_text = "";
     global.button_options = ds_list_create();
+	
+
+    global.race_opponent = noone;
+    
+    // Car types with base stats (name, acceleration, top_speed, handling, cost)
+    global.car_types = ds_map_create();
+    initialize_cars();
+     
+    // Upgrade prices
+    global.upgrade_prices = [1000, 2500, 5000];
+    
+    // Give player starter car
+    var starter_car = clone_car_from_type("Skateboard");
+    ds_list_add(global.player_cars, starter_car);
+    global.player_car = starter_car;
 }
+
+
 
 
 
@@ -73,36 +108,38 @@ function initialize_globals() {
 
 // Start the game
 function game_start() {
-    global.game_text = "Welcome to Tiny Tamers: Text Adventure!\n\n" +
-                      "You are a novice tamer exploring the world to catch and train monsters.\n" +
-                      "Take a look around to get aquainted.";
-    
+    global.game_text = "Welcome to Natsukashisa No Stalgia!\n";
+	
+	if (global.game_state == GAME_STATE.TUTORIAL) {
+		global.game_text += "Would you like a Tutorial?"
+		
+		 // Clear button options
+    ds_list_clear(global.button_options);
+	
+	//Yes Tutorial
+	ds_list_add(global.button_options, {
+	    text: "Yes Please",
+	    action: tutorial_yes
+	});
+		
+	// No tutorial
+	ds_list_add(global.button_options, {
+	    text: "No I'm OK",
+	    action: tutorial_no
+	});
+	
+	}else{
+                      
     // Clear button options
     ds_list_clear(global.button_options);
 	
 	// Home
 	ds_list_add(global.button_options, {
-	    text: "Go Home",
+	    text: "Home?",
 	    action: home_area
 	});
 	
-	// View Skills
-	ds_list_add(global.button_options, {
-	    text: "View Skills",
-	    action: view_skills
-	});
-
-	// Inventory
-	ds_list_add(global.button_options, {
-	    text: "View Inventory",
-	    action: view_inventory
-	});
-	
-    // Add inventory button
-    ds_list_add(global.button_options, {
-        text: "View Monsters",
-        action: view_monsters
-    });
+	}
 }
 
 function travel_map() {
@@ -211,7 +248,6 @@ function change_location() {
     }
 }
 
-       
 
 // Explore the current area
 function explore_area() {
@@ -241,10 +277,6 @@ function explore_area() {
             action: explore_area
         });
         
-        ds_list_add(global.button_options, {
-            text: "View Monsters",
-            action: view_monsters
-        });
 		}
     }
 }
@@ -505,7 +537,7 @@ function view_monsters() {
         
         for (var i = 0; i < ds_list_size(global.captured_monsters); i++) {
             var monster = global.captured_monsters[| i];
-            global.game_text += string(i + 1) + ". " + monster.name + " (Type: " + monster.type + 
+            global.game_text += string(i + 1) + ". " + monster.name + " (Type: " + monster.typing + 
                              ", HP: " + string(monster.hp) + "/" + string(monster.max_hp) + 
                              ", Attack: " + string(monster.attack) + 
                              ", Defense: " + string(monster.defense) + ")\n";

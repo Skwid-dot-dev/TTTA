@@ -693,7 +693,8 @@ function add_monster_to_collection(monster) {
         defense: monster.defense,
         agility: monster.agility,
         knowledge: 0,
-        typing: monster.typing
+        typing: monster.typing,
+		alpha_type: monster.alpha_type
     };
     
     // Add to collection

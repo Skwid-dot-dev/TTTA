@@ -12,15 +12,14 @@ function home_area() {
     
     // Add home actions
     ds_list_add(global.button_options, {
-        text: "Rest (Heal Player)",
+        text: "Bed(Heal)",
         action: rest_and_heal
     });
-    
-    ds_list_add(global.button_options, {
-        text: "Heal Monsters",
-        action: heal_monsters
+       
+	ds_list_add(global.button_options, {
+        text: "Garage",
+        action: view_garage
     });
-    
     // Add upgrade storage button if player has enough currency
     if (global.player_currency >= global.storage_upgrade_cost) {
         ds_list_add(global.button_options, {

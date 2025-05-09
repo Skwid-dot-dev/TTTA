@@ -3,8 +3,8 @@
 function initialize_monster_data(){
 
 // Forest monsters
-    ds_map_add(global.monster_types, "Leafling", {
-        name: "Leafling",
+    ds_map_add(global.monster_types, "Chairmender", {
+        name: "Chairmender",
 		level: 1,
 		knowledge: 0,
         hp: 30,
@@ -13,17 +13,17 @@ function initialize_monster_data(){
         defense: 3,
 		agility:7,
         rarity: 1,
-        typing: "plant",
+        typing: "ChairGrower",
         habitat: "forest",
-        description: "A small creature covered in leaves.",
+        description: "Seems to appear anytime someone says 'Break A Leg'.",
 		alpha_type: "none",
 		shiny_chance: 0.05, // 5% chance of being shiny
     shiny_color: c_yellow, // Color to use for shiny variant nameplate
     shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
     
-    ds_map_add(global.monster_types, "Timberwolf", {
-        name: "Timberwolf",
+    ds_map_add(global.monster_types, "Sofasaur", {
+        name: "Sofasaur",
 		level: 1,
 		knowledge: 0,
         hp: 45,
@@ -32,17 +32,17 @@ function initialize_monster_data(){
         defense: 4,
 		agility: 8,
         rarity: 2,
-        typing: "beast",
+        typing: "ChairThrower",
         habitat: "forest",
-        description: "A wolf-like creature with bark for skin.",
+        description: "Yeeter of seaters.",
 		alpha_type: "none",
 		shiny_chance: 0.05, // 5% chance of being shiny
     shiny_color: c_yellow, // Color to use for shiny variant nameplate
     shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
     });
 	
-	ds_map_add(global.monster_types, "Barkfang", {
-		name: "Barkfang",
+	ds_map_add(global.monster_types, "Barstoolse", {
+		name: "Barstoolse",
 		level: 1,
 		knowledge: 0,
 		hp: 50,
@@ -51,17 +51,17 @@ function initialize_monster_data(){
 		defense: 5,
 		agility: 6,
 		rarity: 2,
-		typing: "beast",
+		typing: "ChairShower",
 		habitat: "forest",
-		description: "A large predator with wooden fangs.",
+		description: "Likes to show off the fact its just an animated Barstool... Bar-Stool?... Whatever.",
 		alpha_type: "none",
 		shiny_chance: 0.05, // 5% chance of being shiny
     shiny_color: c_yellow, // Color to use for shiny variant nameplate
     shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
 	});
 
-	ds_map_add(global.monster_types, "Thornback", {
-	    name: "Thornback",
+	ds_map_add(global.monster_types, "Baby T-Flex", {
+	    name: "Baby T-Flex",
 		level: 1,
 		knowledge: 0,
 	    hp: 35,
@@ -70,9 +70,28 @@ function initialize_monster_data(){
 	    defense: 7,
 	    agility: 5,
 	    rarity: 1,
-	    typing: "plant",
+	    typing: "Jurasskicked",
 	    habitat: "forest",
-	    description: "A slow-moving creature covered in sharp thorns.",
+	    description: "Big Head. Little Arms. Ego to match.",
+	    alpha_type: "none",
+		shiny_chance: 0.05, // 5% chance of being shiny
+    shiny_color: c_yellow, // Color to use for shiny variant nameplate
+    shiny_bonus: 1.2 // Stat multiplier for shiny monsters (20% stronger)
+	});
+	
+	ds_map_add(global.monster_types, "Stimmy Sherman", {
+	    name: "Stimmy Sherman",
+		level: 1,
+		knowledge: 0,
+	    hp: 35,
+	    max_hp: 35,
+	    attack: 6,
+	    defense: 7,
+	    agility: 5,
+	    rarity: 1,
+	    typing: "Freeloading",
+	    habitat: "forest",
+	    description: "Rose's are red, Violets are blue. I can't wait for Covid #2",
 	    alpha_type: "none",
 		shiny_chance: 0.05, // 5% chance of being shiny
     shiny_color: c_yellow, // Color to use for shiny variant nameplate
@@ -80,8 +99,8 @@ function initialize_monster_data(){
 	});
     
     // Cave monsters
-    ds_map_add(global.monster_types, "Stalactite", {
-        name: "Stalactite",
+    ds_map_add(global.monster_types, "PlayerHater", {
+        name: "PlayerHater",
 		level: 1,
 		knowledge: 0,
         hp: 50,
@@ -90,9 +109,9 @@ function initialize_monster_data(){
         defense: 10,
 		agility: 4,
         rarity: 2,
-        typing: "rock",
-        habitat: "cave",
-        description: "A living rock formation that drops from cave ceilings.",
+        typing: "Scrub",
+        habitat: "forest",
+        description: "Has no Game, Equal amount of maidens.",
 		alpha_type: "none",
 		shiny_chance: 0.05, // 5% chance of being shiny
     shiny_color: c_yellow, // Color to use for shiny variant nameplate

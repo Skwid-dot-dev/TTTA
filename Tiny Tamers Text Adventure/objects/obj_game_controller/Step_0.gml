@@ -12,4 +12,9 @@
         case "inventory":
             // Handle inventory logic
             break;
+			// Add this to the step_game_controller function
+		case "racing":
+			update_race();
+			
+			break;
     }
