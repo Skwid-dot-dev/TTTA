@@ -29,7 +29,7 @@ ds_map_add(global.car_types, "Skateboard", {
         upgrade_level: 0,
         max_upgrade: 3,
         description: "A small, nimble car with decent gas mileage.\n" + 
-					"Storable in your pocket like everything else"
+					"Storable in your pocket like everything else."
     });
     
     ds_map_add(global.car_types, "4 Door Coupe", {
@@ -63,7 +63,7 @@ ds_map_add(global.car_types, "Skateboard", {
     });
 }
 	
-	// Clone a car from car types
+// Clone a car from car types
 function clone_car_from_type(car_type_name) {
     var car_template = global.car_types[? car_type_name];
     
@@ -86,7 +86,7 @@ function clone_car_from_type(car_type_name) {
     return noone;
 }
 	
-	function view_garage() {
+function view_garage() {
     global.game_state = "garage";
     
     if (ds_list_size(global.player_cars) > 0) {
@@ -329,7 +329,7 @@ function upgrade_car_menu() {
             global.game_text += "This car is fully upgraded!\n";
         }
         
-        global.game_text += "Your money: $" + string(global.player_money);
+        global.game_text += "Your money: $" + string(global.player_currency);
     } else {
         global.game_text = "No car selected.\n";
     }
@@ -367,9 +367,9 @@ function upgrade_acceleration() {
     if (global.player_car != noone && global.player_car.upgrade_level < global.player_car.max_upgrade) {
         var upgrade_cost = global.upgrade_prices[global.player_car.upgrade_level];
         
-        if (global.player_money >= upgrade_cost) {
+        if (global.player_currency >= upgrade_cost) {
             // Deduct money
-            global.player_money -= upgrade_cost;
+            global.player_currency -= upgrade_cost;
             
             // Upgrade car
             global.player_car.acceleration += 2;
@@ -381,10 +381,10 @@ function upgrade_acceleration() {
             global.game_text += "- Top Speed: " + string(global.player_car.top_speed) + "\n";
             global.game_text += "- Handling: " + string(global.player_car.handling) + "\n\n";
             
-            global.game_text += "Your money: $" + string(global.player_money);
+            global.game_text += "Your money: $" + string(global.player_currency);
         } else {
             global.game_text = "You don't have enough money for this upgrade.\n\n";
-            global.game_text += "Your money: $" + string(global.player_money);
+            global.game_text += "Your money: $" + string(global.player_currency);
         }
     }
     
@@ -408,9 +408,9 @@ function upgrade_speed() {
     if (global.player_car != noone && global.player_car.upgrade_level < global.player_car.max_upgrade) {
         var upgrade_cost = global.upgrade_prices[global.player_car.upgrade_level];
         
-        if (global.player_money >= upgrade_cost) {
+        if (global.player_currency >= upgrade_cost) {
             // Deduct money
-            global.player_money -= upgrade_cost;
+            global.player_currency -= upgrade_cost;
             
             // Upgrade car
             global.player_car.top_speed += 20;
@@ -449,9 +449,9 @@ function upgrade_handling() {
     if (global.player_car != noone && global.player_car.upgrade_level < global.player_car.max_upgrade) {
         var upgrade_cost = global.upgrade_prices[global.player_car.upgrade_level];
         
-        if (global.player_money >= upgrade_cost) {
+        if (global.player_currency >= upgrade_cost) {
             // Deduct money
-            global.player_money -= upgrade_cost;
+            global.player_currency -= upgrade_cost;
             
             // Upgrade car
             global.player_car.handling += 2;
@@ -486,8 +486,6 @@ function upgrade_handling() {
         action: view_garage
     });
 }
-	
-	
 
 // Race menu
 function race_menu() {
@@ -585,14 +583,19 @@ function start_race() {
         global.race_opponent.top_speed += opponent_index * 15;
         
         // Set up race
-        global.game_state = "racing";
+        global.game_state = GAME_STATE.RACING;
         global.race_state = "racing";
         global.race_progress = 0;
         global.race_opponent_progress = 0;
+		global.race_opponent_gear = 0;
+		global.race_max_opponent_gear = 5;
+		global.race_opponent_speed = 0;
         global.race_current_speed = 0;
         global.race_current_gear = 1;
         global.race_shift_window = 0;
         global.race_shift_perfect = false;
+		global.race_top_speed = 0;
+		global.race_perfect_shifts = 0;
         
         global.game_text = "3... 2... 1... GO!\n\n";
         global.game_text += "Your car: " + global.player_car.name + "\n";
@@ -613,7 +616,7 @@ function start_race() {
     }
 }
 
-// Update race (add this to the step_game_controller function under the "racing" case)
+
 function update_race() {
     if (global.race_state == "racing") {
         // Update player car
@@ -669,11 +672,44 @@ function update_race() {
         
         // Update progress
         global.race_progress += global.race_current_speed * (1/60) * 0.28; // Convert km/h to m/s
+		global.race_top_speed = global.race_current_speed;
         
-        // Update opponent
-        var opponent_acceleration = global.race_opponent.acceleration * (1 - (global.race_opponent_progress / global.race_length * 0.3));
-        var opponent_speed = min(global.race_opponent.top_speed, global.race_opponent_progress * 0.5 + opponent_acceleration * 20);
-        global.race_opponent_progress += opponent_speed * (1/60) * 0.28;
+        // Update opponent - BALANCED VERSION
+        // Initialize opponent gear variables if they don't exist
+        if (global.race_opponent_gear == undefined) {
+            global.race_opponent_gear = 1;
+            global.race_opponent_speed = 0;
+            global.race_max_opponent_gear = global.race_max_gear;
+            // AI skill factor (1.0 = same as player, higher = better shifting)
+            global.opponent_skill = 0.9; // Slightly worse than perfect shifting
+        }
+        
+        // Calculate opponent's gear shift point
+        var opponent_gear_shift_point = (global.race_opponent_gear / global.race_max_opponent_gear) * global.race_opponent.top_speed * 0.8;
+        
+        // Handle opponent gear shifting with some AI skill
+        if (global.race_opponent_speed >= opponent_gear_shift_point && global.race_opponent_gear < global.race_max_opponent_gear) {
+            global.race_opponent_gear++;
+            
+            // Opponent shift quality based on AI skill (higher skill = better shifts)
+            var shift_quality = random(2) < global.opponent_skill ? 0.95 : 0.8;
+            global.race_opponent_speed *= shift_quality;
+        }
+        
+        // Calculate opponent acceleration based on current gear
+        var opponent_gear_factor = 1 - ((global.race_opponent_gear - 1) / global.race_max_opponent_gear * 0.5);
+        var opponent_acceleration = global.race_opponent.acceleration * opponent_gear_factor;
+        
+        // Calculate opponent top speed for current gear
+        var opponent_gear_top_speed = (global.race_opponent_gear / global.race_max_opponent_gear) * global.race_opponent.top_speed;
+        
+        // Update opponent speed
+        if (global.race_opponent_speed < opponent_gear_top_speed) {
+            global.race_opponent_speed += opponent_acceleration * (1/60);
+        }
+        
+        // Update opponent progress
+        global.race_opponent_progress += global.race_opponent_speed * (1/60) * 0.28;
         
         // Check if race is finished
         if (global.race_progress >= global.race_length || global.race_opponent_progress >= global.race_length) {
@@ -692,6 +728,161 @@ function update_race() {
                 }
             }
         }
+    }
+}
+
+
+function draw_race() {
+    // Screen dimensions and layout constants
+    var screen_width = room_width;
+    var screen_height = room_height;
+    var header_height = 100;
+    var race_view_height = 200;
+    var stats_height = 200;
+    
+    // Drawing positions
+    var margin = room_width/4;
+    var text_x = margin;
+    var header_y = margin;
+    var race_view_y = header_height + margin;
+    var stats_y = race_view_y + race_view_height + margin;
+    
+    // Set font and alignment
+    draw_set_font(fnt_race);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    
+    // Draw header with race info
+    draw_set_color(c_white);
+    var header_text = "TOUGE RACING: " + global.player_car.name + " vs " + global.race_opponent.name;
+    draw_text(text_x, header_y, header_text);
+    
+    // Draw race track visualization
+    draw_set_color(c_dkgray);
+    draw_rectangle(text_x, race_view_y, screen_width - margin, race_view_y + race_view_height, false);
+    
+    // Calculate positions on track
+    var track_width = screen_width - (margin * 2);
+    var player_x = text_x + (global.race_progress / global.race_length) * track_width;
+    var opponent_x = text_x + (global.race_opponent_progress / global.race_length) * track_width;
+    
+    // Draw track markers/finish line
+    draw_set_color(c_gray);
+    // Draw distance markers every 20% of the track
+    for (var i = 0; i <= 5; i++) {
+        var marker_x = text_x + (i * 0.2) * track_width;
+        draw_line(marker_x, race_view_y, marker_x, race_view_y + race_view_height);
+        
+        // Label marker with distance
+        var marker_distance = string(floor(global.race_length * i * 0.2)) + "m";
+        draw_text(marker_x - 15, race_view_y + race_view_height + 5, marker_distance);
+    }
+    
+    // Draw finish line
+    draw_set_color(c_white);
+    draw_rectangle(text_x + track_width - 5, race_view_y, text_x + track_width + 5, race_view_y + race_view_height, false);
+    
+    // ASCII car representations
+    var car_height = 30;
+    var player_car_y = race_view_y + 50;
+    var opponent_car_y = race_view_y + 120;
+    
+    // Draw player car
+    draw_set_color(c_lime);
+    var player_ascii = ">=[|=>";
+    draw_text(player_x - 30, player_car_y, player_ascii);
+    
+    // Draw opponent car
+    draw_set_color(c_red);
+    var opponent_ascii = ">=[|=>";
+    draw_text(opponent_x - 30, opponent_car_y, opponent_ascii);
+    
+    // Draw player label
+    draw_set_color(c_lime);
+    draw_text(player_x - 30, player_car_y - 20, "YOU");
+    
+    // Draw opponent label
+    draw_set_color(c_red);
+    draw_text(opponent_x - 30, opponent_car_y - 20, "CPU");
+    
+    // Draw car stats and race information
+    draw_set_color(c_white);
+    var stats_text = "";
+    
+    // Show different stats based on race state
+    if (global.race_state == "racing") {
+        stats_text += "YOUR SPEED: " + string(floor(global.race_current_speed)) + " km/h\n";
+        stats_text += "GEAR: " + string(global.race_current_gear) + "/" + string(global.race_max_gear);
+        
+        // Show shift indicator if in shift window
+        if (global.race_shift_window > 0) {
+            draw_set_color(c_yellow);
+            stats_text += " << SHIFT NOW! >>";
+            draw_set_color(c_white);
+        }
+        
+        stats_text += "\n\n";
+        
+        // Calculate lead/trail distance
+        var distance_diff = abs(global.race_progress - global.race_opponent_progress);
+        
+        if (global.race_progress > global.race_opponent_progress) {
+            stats_text += "LEADING BY: " + string(floor(distance_diff)) + " meters";
+        } else if (global.race_opponent_progress > global.race_progress) {
+            stats_text += "TRAILING BY: " + string(floor(distance_diff)) + " meters";
+        } else {
+            stats_text += "DEAD EVEN!";
+        }
+        
+        // Show percentage complete
+        var race_percentage = floor((global.race_progress / global.race_length) * 100);
+        stats_text += "\nRACE PROGRESS: " + string(race_percentage) + "%";
+    } else if (global.race_state == "finished") {
+        // Race finished stats
+        if (global.race_progress >= global.race_length && global.race_opponent_progress < global.race_length) {
+            draw_set_color(c_lime);
+            stats_text += "YOU WIN!\n\n";
+        } else if (global.race_opponent_progress >= global.race_length && global.race_progress < global.race_length) {
+            draw_set_color(c_red);
+            stats_text += "YOU LOSE!\n\n";
+        } else {
+            draw_set_color(c_yellow);
+            stats_text += "PHOTO FINISH!\n\n";
+        }
+        
+        draw_set_color(c_white);
+        stats_text += "TOP SPEED: " + string(floor(global.race_top_speed)) + " km/h\n";
+        stats_text += "PERFECT SHIFTS: " + string(global.race_perfect_shifts) + "/" + string(global.race_max_gear - 1);
+    }
+    
+    // Draw stats text
+    draw_text(text_x, stats_y, stats_text);
+    
+    // Draw mini shift timing meter if in shift window
+    if (global.race_shift_window > 0) {
+        var meter_width = 200;
+        var meter_height = 20;
+        var meter_x = screen_width - margin - meter_width;
+        var meter_y = stats_y;
+        
+        // Draw meter background
+        draw_set_color(c_dkgray);
+        draw_rectangle(meter_x, meter_y, meter_x + meter_width, meter_y + meter_height, false);
+        
+        // Draw meter progress
+        var shift_progress = 1 - (global.race_shift_window / (global.player_car.shift_timing * room_speed));
+        draw_set_color(c_yellow);
+        draw_rectangle(meter_x, meter_y, meter_x + (shift_progress * meter_width), meter_y + meter_height, false);
+        
+        // Draw perfect shift zone
+        var perfect_zone_width = 40;
+        var perfect_zone_x = meter_x + (meter_width / 2) - (perfect_zone_width / 2);
+        draw_set_color(c_green);
+        draw_rectangle(perfect_zone_x, meter_y, perfect_zone_x + perfect_zone_width, meter_y + meter_height, true);
+        
+        // Draw text
+        draw_set_color(c_white);
+        draw_text(meter_x, meter_y - 20, "SHIFT TIMING");
     }
 }
 
@@ -772,7 +963,7 @@ function race_finish() {
         global.game_text += "You earned $" + string(reward_amount) + "!";
         
         // Add reward money
-        global.player_money += reward_amount;
+        global.player_currency += reward_amount;
     } else {
         global.game_text = "Defeat! Your opponent won the race!\n\n";
         global.game_text += "Better luck next time!";
@@ -787,10 +978,6 @@ function race_finish() {
         action: view_garage
     });
     
-    ds_list_add(global.button_options, {
-        text: "Race Again",
-        action: race_menu
-    });
 }
 
 // Add an additional helper function to reset the race state

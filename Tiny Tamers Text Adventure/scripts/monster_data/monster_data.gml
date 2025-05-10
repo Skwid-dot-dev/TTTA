@@ -5,8 +5,6 @@ function initialize_monster_data(){
 // Forest monsters
     ds_map_add(global.monster_types, "Chairmender", {
         name: "Chairmender",
-		level: 1,
-		knowledge: 0,
         hp: 30,
         max_hp: 30,
         attack: 5,
@@ -24,8 +22,6 @@ function initialize_monster_data(){
     
     ds_map_add(global.monster_types, "Sofasaur", {
         name: "Sofasaur",
-		level: 1,
-		knowledge: 0,
         hp: 45,
         max_hp: 45,
         attack: 8,
@@ -43,8 +39,6 @@ function initialize_monster_data(){
 	
 	ds_map_add(global.monster_types, "Barstoolse", {
 		name: "Barstoolse",
-		level: 1,
-		knowledge: 0,
 		hp: 50,
 		max_hp: 50,
 		attack: 9,
@@ -62,8 +56,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Baby T-Flex", {
 	    name: "Baby T-Flex",
-		level: 1,
-		knowledge: 0,
 	    hp: 35,
 	    max_hp: 35,
 	    attack: 6,
@@ -81,8 +73,6 @@ function initialize_monster_data(){
 	
 	ds_map_add(global.monster_types, "Stimmy Sherman", {
 	    name: "Stimmy Sherman",
-		level: 1,
-		knowledge: 0,
 	    hp: 35,
 	    max_hp: 35,
 	    attack: 6,
@@ -101,8 +91,6 @@ function initialize_monster_data(){
     // Cave monsters
     ds_map_add(global.monster_types, "PlayerHater", {
         name: "PlayerHater",
-		level: 1,
-		knowledge: 0,
         hp: 50,
         max_hp: 50,
         attack: 6,
@@ -120,8 +108,6 @@ function initialize_monster_data(){
     
     ds_map_add(global.monster_types, "Glowshroom", {
         name: "Glowshroom",
-		level: 1,
-		knowledge: 0,
         hp: 25,
         max_hp: 25,
         attack: 4,
@@ -139,8 +125,6 @@ function initialize_monster_data(){
 	
 	ds_map_add(global.monster_types, "Lurker", {
 	    name: "Lurker",
-		level: 1,
-		knowledge: 0,
 	    hp: 40,
 	    max_hp: 40,
 	    attack: 7,
@@ -158,8 +142,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Quaketail", {
 	    name: "Quaketail",
-		level: 1,
-		knowledge: 0,
 	    hp: 55,
 	    max_hp: 55,
 	    attack: 9,
@@ -178,8 +160,6 @@ function initialize_monster_data(){
     // Meadow monsters
     ds_map_add(global.monster_types, "Buzzwing", {
         name: "Buzzwing",
-		level: 1,
-		knowledge: 0,
         hp: 20,
         max_hp: 20,
         attack: 7,
@@ -197,8 +177,6 @@ function initialize_monster_data(){
     
     ds_map_add(global.monster_types, "Fluffball", {
         name: "Fluffball",
-		level: 1,
-		knowledge: 0,
         hp: 35,
         max_hp: 35,
         attack: 3,
@@ -216,8 +194,6 @@ function initialize_monster_data(){
 	
 	ds_map_add(global.monster_types, "Dewfang", {
 	    name: "Dewclaw",
-		level: 1,
-		knowledge: 0,
 	    hp: 25,
 	    max_hp: 25,
 	    attack: 8,
@@ -235,8 +211,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Sunmoth", {
 	    name: "Sunmoth",
-		level: 1,
-		knowledge: 0,
 	    hp: 40,
 	    max_hp: 40,
 	    attack: 5,
@@ -255,8 +229,6 @@ function initialize_monster_data(){
     // Mountain monsters
     ds_map_add(global.monster_types, "Rocktooth", {
         name: "Rocktooth",
-		level: 1,
-		knowledge: 0,
         hp: 60,
         max_hp: 60,
         attack: 10,
@@ -274,8 +246,6 @@ function initialize_monster_data(){
     
     ds_map_add(global.monster_types, "Frostfeather", {
         name: "Frostfeather",
-		level: 1,
-		knowledge: 0,
         hp: 40,
         max_hp: 40,
         attack: 8,
@@ -293,8 +263,6 @@ function initialize_monster_data(){
 	
 	ds_map_add(global.monster_types, "Blizzardhorn", {
 	    name: "Blizzardhorn",
-		level: 1,
-		knowledge: 0,
 	    hp: 65,
 	    max_hp: 65,
 	    attack: 11,
@@ -312,8 +280,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Slatewing", {
 	    name: "Slatewing",
-		level: 1,
-		knowledge: 0,
 	    hp: 50,
 	    max_hp: 50,
 	    attack: 7,
@@ -332,8 +298,6 @@ function initialize_monster_data(){
 	// Desert Monsters
 	ds_map_add(global.monster_types, "Sandfang", {
 	    name: "Sandfang",
-		level: 1,
-		knowledge: 0,
 	    hp: 45,
 	    max_hp: 45,
 	    attack: 8,
@@ -351,8 +315,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Cactisaur", {
 	    name: "Cactisaur",
-		level: 1,
-		knowledge: 0,
 	    hp: 60,
 	    max_hp: 60,
 	    attack: 9,
@@ -370,8 +332,6 @@ function initialize_monster_data(){
 	
 	ds_map_add(global.monster_types, "Sandcrawler", {
 	    name: "Sandcrawler",
-		level: 1,
-		knowledge: 0,
 	    hp: 55,
 	    max_hp: 55,
 	    attack: 9,
@@ -389,8 +349,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Cactoid", {
 	    name: "Cactoid",
-		level: 1,
-		knowledge: 0,
 	    hp: 70,
 	    max_hp: 70,
 	    attack: 7,
@@ -408,8 +366,6 @@ function initialize_monster_data(){
 
 	ds_map_add(global.monster_types, "Mirage", {
 	    name: "Mirage",
-		level: 1,
-		knowledge: 0,
 	    hp: 45,
 	    max_hp: 45,
 	    attack: 15,

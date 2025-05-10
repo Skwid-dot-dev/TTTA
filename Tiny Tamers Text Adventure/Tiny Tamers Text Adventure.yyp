@@ -34,6 +34,7 @@
   },
   "name":"Tiny Tamers Text Adventure",
   "resources":[
+    {"id":{"name":"fnt_race","path":"fonts/fnt_race/fnt_race.yy",},},
     {"id":{"name":"obj_button","path":"objects/obj_button/obj_button.yy",},},
     {"id":{"name":"obj_game_controller","path":"objects/obj_game_controller/obj_game_controller.yy",},},
     {"id":{"name":"obj_text_display","path":"objects/obj_text_display/obj_text_display.yy",},},

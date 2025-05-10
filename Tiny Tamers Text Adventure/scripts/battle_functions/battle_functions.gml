@@ -395,18 +395,14 @@ function battle_victory() {
     // Calculate experience gained
     var exp_gained = calculate_experience(global.battle_monster);
     
-    // Award experience to player or monster
-    if (global.current_monster != -1 && global.current_monster < ds_list_size(global.captured_monsters)) {
-        var active_monster = global.captured_monsters[| global.current_monster];
-        award_experience_to_monster(active_monster, exp_gained);
-    } else {
+   
         // Award experience to player
         global.player_exp += exp_gained;
         global.game_text += "You gained " + string(exp_gained) + " experience points!\n";
         
         // Check for level up
         check_player_level_up();
-    }
+    
     
     // End battle
     global.battle_active = false;
@@ -465,32 +461,7 @@ function award_experience_to_monster(monster, exp_amount) {
     check_monster_level_up(monster);
 }
 
-/// @function check_monster_level_up(monster)
-/// @description Check if a monster should level up and handle it
-/// @param {struct} monster The monster to check for level up
-function check_monster_level_up(monster) {
-    // Calculate exp needed for next level (simple formula)
-    var next_level_exp = monster.level * 100;
-    
-    // Check if monster has enough exp to level up
-    if (monster.exp >= next_level_exp) {
-        // Level up!
-        monster.level += 1;
-        global.game_text += monster.name + " grew to level " + string(monster.level) + "!\n";
-        
-        // Increase stats
-        monster.max_hp += 5;
-        monster.hp = monster.max_hp; // Heal to full on level up
-        monster.attack += 2;
-        monster.defense += 1;
-        monster.agility += 1;
-        
-        global.game_text += "Its stats increased!\n";
-        
-        // Check for evolutions or new moves
-        check_monster_evolution(monster);
-    }
-}
+
 
 /// @function check_monster_evolution(monster)
 /// @description Check if a monster should evolve

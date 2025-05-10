@@ -29,7 +29,7 @@ function initialize_globals() {
 	global.adventure_count = 0;
     
     // Game state
-	enum GAME_STATE { TUTORIAL, HOME, EXPLORE, BATTLE, MENU }
+	enum GAME_STATE { TUTORIAL, HOME, RACING, EXPLORE, BATTLE, MENU }
     global.game_state = GAME_STATE.TUTORIAL; // exploration, battle, menu
     global.current_location = "tutorial";
 	
@@ -46,13 +46,10 @@ function initialize_globals() {
     
     // Available locations
     global.locations = ds_list_create();
-    ds_list_add(global.locations, "tutorial", "home", "city", "forest", "cave", "meadow", "mountain", "desert");
+    ds_list_add(global.locations, "forest", "cave", "meadow", "mountain", "desert");
 	
 	// Add location level requirements
     global.location_levels = ds_map_create();
-	ds_map_add(global.location_levels, "tutorial", 1);
-	ds_map_add(global.location_levels, "home", 1);
-	ds_map_add(global.location_levels, "city", 1);
     ds_map_add(global.location_levels, "forest", 1);
     ds_map_add(global.location_levels, "meadow", 3);
     ds_map_add(global.location_levels, "cave", 5);
@@ -85,6 +82,7 @@ function initialize_globals() {
 	
 
     global.race_opponent = noone;
+	global.opponent_skill = 1;
     
     // Car types with base stats (name, acceleration, top_speed, handling, cost)
     global.car_types = ds_map_create();

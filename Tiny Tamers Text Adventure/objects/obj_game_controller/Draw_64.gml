@@ -14,7 +14,7 @@
             break;
 			// Add this to the step_game_controller function
 		case GAME_STATE.RACING:
-			update_race();
+
 			draw_race();
 			
 			break;
