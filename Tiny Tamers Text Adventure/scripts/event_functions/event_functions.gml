@@ -1,28 +1,36 @@
 
 function initialize_events(){
 	// Common events
-ds_map_add(global.random_events, "lost_traveler", {
-    name: "Lost Traveler",
-    description: "You encounter a lost traveler who needs directions.",
-    frequency: 20, // Relative chance of occurring
-    min_level: 1,  // Minimum player level required
-    action: event_lost_traveler
-});
+//ds_map_add(global.random_events, "lost_traveler", {
+//    name: "Lost Traveler",
+//    description: "You encounter a lost traveler who needs directions.",
+//    frequency: 20, // Relative chance of occurring
+//    min_level: 1,  // Minimum player level required
+//    action: event_lost_traveler
+//});
 
-ds_map_add(global.random_events, "treasure_chest", {
-    name: "Hidden Treasure",
-    description: "You spot a partially buried treasure chest.",
-    frequency: 15,
-    min_level: 1,
-    action: event_treasure_chest
-});
+//ds_map_add(global.random_events, "treasure_chest", {
+//    name: "Hidden Treasure",
+//    description: "You spot a partially buried treasure chest.",
+//    frequency: 15,
+//    min_level: 1,
+//    action: event_treasure_chest
+//});
 
-ds_map_add(global.random_events, "monster_nest", {
-    name: "Monster Nest",
-    description: "You've stumbled upon a nest with multiple monsters!",
+//ds_map_add(global.random_events, "monster_nest", {
+//    name: "Monster Nest",
+//    description: "You've stumbled upon a nest with multiple monsters!",
+//    frequency: 10,
+//    min_level: 3,
+//    action: event_monster_nest
+//});
+	
+ds_map_add(global.random_events, "mokemon_appears", {
+	 name: "Mockemon Appears",
+    description: "Whats this!",
     frequency: 10,
-    min_level: 3,
-    action: event_monster_nest
+    min_level: 1,
+    action: event_mockemon_appears
 });
 
 // Location-specific events
@@ -267,6 +275,164 @@ function event_lost_traveler_shortcut() {
     });
     
 }
+
+
+function event_mockemon_appears() {
+	global.game_text = "You step into the Tall Grass, the classic battleground of random encounters.\n\n";
+    global.game_text += "The air is thick with nostalgia, and the leaves rustle with unseen forces that seem\n";
+	global.game_text += "aggressively interested in ruining someone's day.\n\n";
+	global.game_text += "A Disillusioned Ace Trainer, dressed in gaudy chamionship gear, stands trembling\n";
+	global.game_text += "at the edge of the grass.\n\n";
+	global.game_text += "His face carries the weight of a thousand forced encounters.\n";
+
+	
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add event options
+    ds_list_add(global.button_options, {
+        text: "Are You OK?!",
+        action: event_mockemon_ok
+    });
+    
+    ds_list_add(global.button_options, {
+        text: "Run Away",
+        action: event_treasure_chest_ignore
+    });	
+}
+
+function event_mockemon_ok() {
+	global.game_text = "Ace Trainer Desmond: \"Oh, you poor soul. You've entered The Grass. \n\n";
+    global.game_text += "The nightmare begins anew. I was young once... I had dreams.\n";
+	global.game_text += "And then-THEN-I took one step too many.\"";
+	global.game_text += "He gestures wildly at the grass, eyes full of horror.\n";
+	global.game_text += "\"I haven't seen civilization in years. My inventory is just\n\n";
+	global.game_text += "hundreds of Repels. Do you have a moment to talk about the true cost of walking?!\"\n\n";
+	global.game_text += "Desmond offers a Reperl, insisting that \"escape is an illusion\", but secretly\n"
+	global.game_text += "hoping someone will validate his suffering."
+
+	
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add event options
+    ds_list_add(global.button_options, {
+        text: "Take Repel",
+        action: event_mockemon_encounter
+    });
+    
+    ds_list_add(global.button_options, {
+        text: "Repel Repel",
+        action: event_mockemon_encounter
+    });	
+}
+
+function event_mockemon_encounter() {
+	global.game_text = "You take a single step forward and-BAM-a random encounter instantly triggers.\n\n";
+    global.game_text += "Suddenly, an exclamation mark appears above Desmond's head.\n\n";
+	global.game_text += "Ace Trainer Desmond: \"OH NO, NOT AGAIN-\"\n";
+	global.game_text += "The screen transitions into a battle, but instead of a wild creature,\n";
+	global.game_text += "the opponent is a literal patch of animated grass, aggressively swaying.\n";
+	global.game_text += "in an intimidating fashion.\n";
+
+	
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add event options
+    ds_list_add(global.button_options, {
+        text: "BATTLE?!",
+        action: event_mockemon_battle
+    });
+    
+    ds_list_add(global.button_options, {
+        text: "RUN",
+        action: event_mockemon_run
+    });	
+}
+
+function event_mockemon_battle() {
+	global.game_text = "Remembering that Tall Grass is Small Shrub, \n";
+    global.game_text += "You pull up, ready to Stomp the Yard.\n\n";
+	global.game_text += "With force that would have scientists tell you \"This isn't the time to use that!\"\n";
+	global.game_text += "you plant your foot in the plant shredding AGGRESHRUB on a molecular level.\n";
+	global.game_text += "Rustling leaves, another AGGRESHRUB is quick to take stage.\n\n";
+	global.game_text += "You begin to see a pattern.\n\n";
+	global.game_text += "Desmond screams in the distance";
+
+	
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add event options
+    ds_list_add(global.button_options, {
+        text: "?!BATTLE",
+        action: event_mockemon_battle
+    });
+    
+    ds_list_add(global.button_options, {
+        text: "Run Away",
+        action: event_mockemon_run
+    });	
+}
+	
+function event_mockemon_run() {
+	global.game_text = "Given the ambiance of the situation, you decide that the grass is greener\n";
+    global.game_text += "on the other side. You start to walk away,\n";
+	global.game_text += "AGGRESHRUBs ability \"Unavoidable Fate\" allows him to move first\n";
+	global.game_text += "extending the battle indefinately\n\n";
+	global.game_text += "You can't escape!.\n\n";
+	global.game_text += "Desmond screams in the distance.\n";
+
+	
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add event options
+    ds_list_add(global.button_options, {
+        text: "?!BATTLE",
+        action: event_mockemon_battle
+    });
+    
+    ds_list_add(global.button_options, {
+        text: "Repel",
+        action: event_mockemon_repel
+    });	
+}
+		
+function event_mockemon_repel() {
+	global.game_text = "You go to pull a Repel out of your pocket, \n";
+    global.game_text += "remembering you don't have one.\n\n";
+	global.game_text += "AGGRESHRUB stares minicingly...\n\n";
+	global.game_text += "You are out of dignity... You crash out...\n";
+
+	
+    
+    // Clear button options
+    ds_list_clear(global.button_options);
+    
+    // Add event options
+    ds_list_add(global.button_options, {
+        text: "Return",
+        action: explore_area
+    });
+    
+}
+	
+
+
+
+
+
+
+
+
+
 
 
 // Hidden Treasure event

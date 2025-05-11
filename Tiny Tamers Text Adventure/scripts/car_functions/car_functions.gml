@@ -1,6 +1,5 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function initialize_cars(){
+
+function initialize_cars() {
 // Starter cars
 
 ds_map_add(global.car_types, "Skateboard", {
@@ -616,7 +615,6 @@ function start_race() {
     }
 }
 
-
 function update_race() {
     if (global.race_state == "racing") {
         // Update player car
@@ -730,7 +728,6 @@ function update_race() {
         }
     }
 }
-
 
 function draw_race() {
     // Screen dimensions and layout constants
@@ -885,8 +882,6 @@ function draw_race() {
         draw_text(meter_x, meter_y - 20, "SHIFT TIMING");
     }
 }
-
-
 
 function shift_gear() {
     if (global.race_state == "racing" && global.race_current_gear < global.race_max_gear) {
