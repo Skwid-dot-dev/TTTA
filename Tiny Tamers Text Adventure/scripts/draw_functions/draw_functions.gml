@@ -1,5 +1,6 @@
 // Draw player info
-function draw_player_info(info_y) {
+function draw_player_info(info_x,info_y) {
+	var text_x = info_x;
     draw_text(text_x, info_y, "Health: " + string(global.player_health) + "/" + string(global.player_max_health));
     draw_text(text_x + 200, info_y, "Level: " + string(global.player_level));
     draw_text(text_x + 400, info_y, "EXP: " + string(global.player_exp) + "/" + string(global.player_exp_to_next));
@@ -8,13 +9,25 @@ function draw_player_info(info_y) {
 	draw_text(text_x + 800, info_y, "Currency: " + string(global.player_currency));
 }
 
+function draw_vehicle_info(info_x,info_y) {
+	var text_x = info_x;
+    draw_text(text_x, info_y, "Name: " + string(global.player_car.name));
+    draw_text(text_x + 200, info_y, "Seats: " + string(global.player_car.seats));
+    draw_text(text_x + 400, info_y, "Mileage: " + string(global.player_car.mileage));
+    draw_text(text_x + 600, info_y, "Value: " + string(global.player_car.value));
+    draw_text(text_x, info_y + 20, "Paintjob: " + string(global.player_car.description));
+}
+
+
+
 // Check for active monster
 function has_active_monster() {
     return global.current_monster != -1 && global.current_monster < ds_list_size(global.captured_monsters);
 }
 
 // Draw active monster info
-function draw_active_monster_info(info_y) {
+function draw_active_monster_info(info_x,info_y) {
+	var text_x = info_x;
     var active_monster = global.captured_monsters[| global.current_monster];
     draw_text(text_x, info_y, "Active Monster: " + active_monster.name);
     

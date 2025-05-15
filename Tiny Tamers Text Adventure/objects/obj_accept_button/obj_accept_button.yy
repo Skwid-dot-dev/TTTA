@@ -30,8 +30,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_accept_button",
-    "path":"sprites/spr_accept_button/spr_accept_button.yy",
+    "name":"spr_button_a",
+    "path":"sprites/spr_button_a/spr_button_a.yy",
   },
   "spriteMaskId":null,
   "visible":true,

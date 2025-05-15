@@ -2,9 +2,13 @@ function initialize_globals() {
 	randomise();
 	
     // Player stats
+	global.player_name = "";
+	global.player_nameseed = -1;
     global.player_health = 100;
     global.player_max_health = 100;
     global.player_level = 1;
+	global.player_reputation = 0;
+	global.player_rep_to_next = 100;
     global.player_exp = 0;
     global.player_exp_to_next = 100;
 	global.player_attack = 10;
@@ -14,6 +18,11 @@ function initialize_globals() {
 	//Player Car
 	global.player_car = noone;
     global.player_cars = ds_list_create();
+	//Driver Globals
+	global.player_driver = noone;
+	global.player_drivers = ds_map_create();
+	global.driver_types = ds_map_create();
+	initialize_driver_data();
 	//Race Globals
 	global.race_state = "none"; // none, racing, shifting, results
     global.race_progress = 0;
@@ -27,6 +36,7 @@ function initialize_globals() {
     global.race_results = "";
 	//Run Count
 	global.adventure_count = 0;
+	global.pixel_font = fnt_dialogue;
     
     // Game state
 	enum GAME_STATE { TUTORIAL, HOME, RACING, EXPLORE, BATTLE, MENU }
@@ -91,10 +101,7 @@ function initialize_globals() {
     // Upgrade prices
     global.upgrade_prices = [1000, 2500, 5000];
     
-    // Give player starter car
-    var starter_car = clone_car_from_type("Skateboard");
-    ds_list_add(global.player_cars, starter_car);
-    global.player_car = starter_car;
+    
 }
 
 
@@ -106,10 +113,10 @@ function initialize_globals() {
 
 // Start the game
 function game_start() {
-    global.game_text = "Welcome to Natsukashisa No Stalgia!\n";
+    global.game_text = "Welcome to Natsukashisa No Stalgia!\nWould you like a tutorial?";
 	
 	if (global.game_state == GAME_STATE.TUTORIAL) {
-		global.game_text += "Would you like a Tutorial?"
+		
 		
 		 // Clear button options
     ds_list_clear(global.button_options);
@@ -162,6 +169,8 @@ function travel_map() {
         }
     }
 }
+	
+//
 function change_location() {
     var location_index = floor((mouse_x - obj_text_display.text_x) / (obj_text_display.button_width + obj_text_display.button_spacing));
     
@@ -245,7 +254,6 @@ function change_location() {
         }
     }
 }
-
 
 // Explore the current area
 function explore_area() {
@@ -351,6 +359,7 @@ function find_monster() {
     ds_list_destroy(available_monsters);
 }
 
+//View Encyclopedia
 function view_monster_encyclopedia() {
     global.game_state = "encyclopedia";
     global.game_text = "Monster Encyclopedia:\n\n";
@@ -374,8 +383,6 @@ function view_monster_encyclopedia() {
         action: home_area
     });
 }
-
-
 
 // Function to set active monster during battle
 function set_battle_monster() {
@@ -437,12 +444,6 @@ function return_to_battle() {
         });
     }
 }
-
-
-
-
-
-
 
 // Run away from battle
 function run_away() {
@@ -646,7 +647,8 @@ function heal_monsters() {
     // Go back to home instead of monster view
     home_area();
 }
-
+	
+//Select monster
 function select_monster() {
     global.game_state = "select_monster";
     
@@ -684,7 +686,8 @@ function select_monster() {
         action: view_monsters
     });
 }
-
+	
+//Set monster as active
 function set_active_monster() {
     var monster_index = floor((mouse_x - obj_text_display.text_x) / 
                          (obj_text_display.button_width + obj_text_display.button_spacing));

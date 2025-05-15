@@ -4,7 +4,7 @@ function initialize_cars() {
 
 ds_map_add(global.car_types, "Skateboard", {
         name: "Skateboard",
-		doors: 2,
+		seats: 1,
 		mileage: 200,
         acceleration: 2,
         top_speed: 85,
@@ -19,7 +19,7 @@ ds_map_add(global.car_types, "Skateboard", {
     ds_map_add(global.car_types, "Capsule Car", {
         name: "Capsule Car",
 		mileage: 400,
-		doors: 2,
+		seats: 2,
         acceleration: 3,
         top_speed: 120,
         handling: 7,
@@ -33,7 +33,7 @@ ds_map_add(global.car_types, "Skateboard", {
     
     ds_map_add(global.car_types, "4 Door Coupe", {
         name: "4 Door Coupe",
-		doors: 4,
+		seats: 4,
 		mileage: 200,
         acceleration: 4,
         top_speed: 150,
@@ -48,7 +48,7 @@ ds_map_add(global.car_types, "Skateboard", {
     
     ds_map_add(global.car_types, "RhinaRock",{
 		name: "RhinaRock",
-		doors: 4,
+		seats: 4,
 		mileage: 400,
         acceleration: 7,
         top_speed: 180,
@@ -69,6 +69,8 @@ function clone_car_from_type(car_type_name) {
     if (car_template != undefined) {
         var new_car = {
             name: car_template.name,
+			seats: car_template.seats,
+			mileage: car_template.mileage,
             acceleration: car_template.acceleration,
             top_speed: car_template.top_speed,
             handling: car_template.handling,
